@@ -154,24 +154,58 @@ const users = [
   },
 ];
 
-const calculateTotalBalance = (users) =>
-  users.reduce((total, user) => total + user.balance, 0);
+const calculateTotalBalance = function (users) {
+  const totalBalance = users.reduce(function (total, user) {
+    return total + user.balance;
+  }, 0);
 
-const getUsersWithFriend = (users, friendName) =>
-  users
-    .filter((user) => user.friends.includes(friendName))
-    .map((user) => user.name);
+  return totalBalance;
+};
 
-const getNamesSortedByFriendsCount = (users) =>
-  [...users]
-    .sort((a, b) => a.friends.length - b.friends.length)
-    .map((user) => user.name);
+const getUsersWithFriend = function (users, friendName) {
+  const names = users.reduce(function (result, user) {
+    if (user.friends.includes(friendName)) {
+      result.push(user.name);
+    }
 
-const getSortedUniqueSkills = (users) =>
-  users
-    .flatMap((user) => user.skills)
-    .filter((skill, index, array) => array.indexOf(skill) === index)
-    .sort();
+    return result;
+  }, []);
+
+  return names;
+};
+
+const getNamesSortedByFriendsCount = function (users) {
+  const usersCopy = [...users];
+
+  usersCopy.sort(function (a, b) {
+    return a.friends.length - b.friends.length;
+  });
+
+  const names = usersCopy.reduce(function (result, user) {
+    result.push(user.name);
+    return result;
+  }, []);
+
+  return names;
+};
+
+const getSortedUniqueSkills = function (users) {
+  const skills = users.reduce(function (result, user) {
+    user.skills.reduce(function (sameResult, skill) {
+      if (!sameResult.includes(skill)) {
+        sameResult.push(skill);
+      }
+
+      return sameResult;
+    }, result);
+
+    return result;
+  }, []);
+
+  skills.sort();
+
+  return skills;
+};
 
 console.log(calculateTotalBalance(users));
 console.log(getUsersWithFriend(users, "Briana Decker"));
